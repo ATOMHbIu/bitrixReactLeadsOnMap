@@ -1,0 +1,104 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mapContainer{
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+
+.toolBar{
+  width: 100%;
+  display: block;
+  padding: 20px 0px;
+  position: absolute;
+  top: 0;
+  z-index: 9999;
+  background: #fff;
+}
+
+.slider{
+  display: inline;
+  cursor: pointer;
+  margin-left: 40px;
+  float:left;
+}
+
+  .slider:after{
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .slider .leftTitle,
+  .slider .rightTitle{
+    float: left;
+  }
+
+  .slider .slide{
+    display: block;
+    margin: auto 5px;
+    position: relative;
+    float: left;
+    width: 25px;
+    height: 7px;
+    margin-top: 7px;
+    background: rgb(87, 189, 230);
+    border-radius: 3px;
+  }
+
+    .slider .slide .point{
+      position: absolute;
+      left: 3px;
+      height: 15px;
+      width: 5px;
+      top: -4px;
+      box-sizing: border-box;
+      border: 1px #282c34 solid;
+      background: rgb(146, 146, 146);
+      display: block;
+      border-radius: 2px;
+      transition: all .3s;
+    }
+
+    .slider .slide.toggled .point{
+      left: 16px;
+      transition: all .3s;
+    }
