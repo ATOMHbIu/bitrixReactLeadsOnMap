@@ -1,27 +1,34 @@
-import React, { useState } from 'react'
-import {Map, Placemark} from 'react-yandex-maps'
+import React, { useState, useEffect, useLayoutEffect, componentDidMount } from 'react'
+import {Map, Placemark, ObjectManager} from 'react-yandex-maps'
 
-
-const MapContainer = () =>{
+const MapContainer = ({points}) =>{
 
     const [mainMap, setMap] = useState(null)
     const [ymaps, setYmaps] = useState(null)
 
-    const createPM =(e)=>{
-        let coord = e.get('coords')
-        mainMap.geoObjects.add(new ymaps.Placemark(coord, {preset:'islands#redDotIcon'}))
-    }
-
     return (
         <Map
-            defaultState={{ center: [55.753215, 37.622504], zoom: 12,
+            defaultState={{ center: [55.753215, 37.622504], zoom: 11,
                 controls: [] }}
             width='100%'
             height='100vh'
-            onClick={(e)=>createPM(e)}
             onLoad={ymaps => setYmaps(ymaps)}
             instanceRef={ref => setMap(ref)}
-        ></Map>
+        >
+            {points&&(
+                points.map(el=>(
+                    <Placemark
+                        key={el.ID}
+                        geometry={el.UF_CRM_1605016734510}
+                        properties={{
+                            hintContent: el.ID,
+                            balloonContent: el.TITLE
+                        }}
+                    />
+                ))
+            )}
+            {/* <Active></Active> */}
+        </Map>
     )
 }
 
