@@ -4,32 +4,21 @@ import { YMaps } from 'react-yandex-maps';
 import MapContainer from './components/map'
 import ToolBar from './components/toolBar'
 import regions from './data/moscow'
+import RightMenu from './components/rightMenu'
 
 
 function App() {
-  const [points, setPoints] = useState();
+  const [points, setPoints] = useState('');
   const [{dateStart,dateEnd}, setDates] = useState({});
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
 
-
-  // TO-DO: Use only one useEffect()
   useEffect(()=>{
-    fetch("https://moscowdom.adsdesign.ru/current")
-    .then(res => res.json())
-    .then(
-        (result) => {
-          console.log(result)
-            setPoints(result.points)
-            setLoading(false)
-        },
-        (error) => {
-        }
-    )
+    setLoading(true)
+      fetchData();
   },[])
 
   useEffect(()=>{
-    console.log(settings)
     if (settings!=null){
       setLoading(true)
       fetchData();
@@ -60,6 +49,7 @@ function App() {
       <YMaps query={{coordorder: 'latlong', load: 'package.full'}}>
         <div className={loading?'loading true':'loading false'}> <img src="https://b24.adsdesign.ru/bp/MoscowDOM/static/media/loader.afbd6385.gif" /></div>
         <ToolBar dateStart={dateStart} dateEnd={dateEnd} newData={(data)=>setNewData(data)}/>
+        <RightMenu total={points.length} regions={regions.features}/>
         <MapContainer points={points} regions={regions}/>
       </YMaps>
     </div>

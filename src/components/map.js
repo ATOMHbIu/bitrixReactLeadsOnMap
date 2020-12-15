@@ -3,21 +3,26 @@ import {Map, Placemark, ObjectManager, Polygon} from 'react-yandex-maps'
 
 const MapContainer = ({points, regions}) =>{
 
-    const [mainMap, setMap] = useState(null)
+    const [map, setMap] = useState(null)
     const [ymaps, setYmaps] = useState(null)
-    const [poly, setPoly] = useState(regions)
 
-    // console.log(poly)
-    
-    // ymaps.ObjectManager.add({poly})
-
-    const setMapLoad=(map)=>{
-        setYmaps(map)
-        // console.log(ymaps)
-        // console.log(map)
-        // console.log(mainMap)
-        const objectManager = new map.ObjectManager()
-        objectManager.add(poly)
+    const calc=(e, ref)=>{
+        const objectId = e.get('objectId');
+        const obj = ref.objects.getById(objectId);
+        let iter = 0;
+        let ymaPol = new ymaps.Polygon(obj.geometry.coordinates)
+        ymaPol.options.setParent(map.options);
+        ymaPol.geometry.setMap(map);
+        let crds = points.filter(el=>{
+            if (el.coords!=null||el.coords!=undefined){
+                return el.coords
+            }
+        })
+        crds.forEach(el=>{
+            let current = (ymaPol.geometry.contains([parseFloat(el.coords[0]),parseFloat(el.coords[1])]))
+            if(current){iter++}
+        })
+        console.log(iter)
     }
 
     return (
@@ -26,23 +31,19 @@ const MapContainer = ({points, regions}) =>{
                 controls: [] }}
             width='100%'
             height='100vh'
-            onLoad={ymaps => setMapLoad(ymaps)}
-            instanceRef={ref => setMap(ref)}
+            onLoad={ymaps => setYmaps(ymaps)}
+            instanceRef={map => setMap(map)}
         >
             <ObjectManager
-                features={poly}
-                // defaultFeatures={poly}
-                // defaultObjects={poly}
-                options={{coordorder:'longlat'}}
+                features={regions}
                 modules={["package.full"]}
-                filter={object => object.id % 2 === 0}
-                // objects={poly}
+                instanceRef={ref => ref.objects.events.add('click', (e) => { calc(e,ref)})}
             />
             {points&&(
                 points.map(el=>(
                     <Placemark
                         key={el.ID}
-                        geometry={el.UF_CRM_1605016734510}
+                        geometry={el.coords}
                         properties={{
                             hintContent: el.ID,
                             balloonContent: el.TITLE

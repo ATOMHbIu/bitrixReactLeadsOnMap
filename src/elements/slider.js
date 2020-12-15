@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 const Slider=({
         leftTitle,
         rightTitle,
-        val1,
-        val2
+        type
     })=>{
 
     const [toggled, setToggled] = useState(false)
     const toggle=()=>{
         let newState = toggled?false:true;
         setToggled(newState);
+        type(toggled?'lead':'deal')
     }
 
     return(
