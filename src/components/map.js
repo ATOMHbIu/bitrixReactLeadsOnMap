@@ -15,6 +15,7 @@ const MapContainer = ({points, regions, selectorData, lightItem}) =>{
 
     const countRegions = () =>{
         console.log('counting regions')
+        console.log(points)
         if (points.length>=0){
             regions.features.forEach(pol=>{
                 const obj = mapRef.objects.getById(pol.id);
