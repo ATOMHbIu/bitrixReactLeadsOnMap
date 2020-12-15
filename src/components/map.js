@@ -7,23 +7,36 @@ const MapContainer = ({points, regions, selectorData}) =>{
     const [ymaps, setYmaps] = useState(null)
     const [mapRef, setMapRef]=useState(null)
 
-    const calc=(e)=>{
+    useEffect(()=>{
+        if(mapRef!==null&&points!==null) {
+            countRegions()
+        }
+    },[mapRef, points])
+
+    const countRegions = () =>{
+        if (points.length>=0){
+            regions.features.forEach(pol=>{
+                const obj = mapRef.objects.getById(pol.id);
+                let iter = 0;
+                let ymaPol = new ymaps.Polygon(obj.geometry.coordinates)
+                ymaPol.options.setParent(map.options);
+                ymaPol.geometry.setMap(map);
+                let crds = points.filter(el=>{
+                    if (el.coords!=null||el.coords!=undefined){
+                        return el.coords
+                    }
+                })
+                crds.forEach(el=>{
+                    let current = (ymaPol.geometry.contains([parseFloat(el.coords[0]),parseFloat(el.coords[1])]))
+                    if(current){iter++}
+                })
+                selectorData(pol.id, iter)
+            })      
+        }  
+    }
+
+    const lightItem=(e)=>{
         const objectId = e.get('objectId');
-        const obj = mapRef.objects.getById(objectId);
-        let iter = 0;
-        let ymaPol = new ymaps.Polygon(obj.geometry.coordinates)
-        ymaPol.options.setParent(map.options);
-        ymaPol.geometry.setMap(map);
-        let crds = points.filter(el=>{
-            if (el.coords!=null||el.coords!=undefined){
-                return el.coords
-            }
-        })
-        crds.forEach(el=>{
-            let current = (ymaPol.geometry.contains([parseFloat(el.coords[0]),parseFloat(el.coords[1])]))
-            if(current){iter++}
-        })
-        selectorData(objectId, iter)
     }
 
     return (
@@ -38,7 +51,7 @@ const MapContainer = ({points, regions, selectorData}) =>{
             <ObjectManager
                 features={regions}
                 modules={["package.full"]}
-                onClick={e=>calc(e)}
+                onClick={e=> lightItem(e)}
                 instanceRef={ref => setMapRef(ref)}
             />
             {points&&(

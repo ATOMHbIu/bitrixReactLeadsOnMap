@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react'
 
 const RightMenu = ({total, regions, triggerList})=>{
-    useEffect(()=>{
-        console.log(triggerList)
-    }, [triggerList])
     return(
         <div className="rightmenu">
             <div className="row"><div className="title">Всего:</div><div className="count">{total}</div></div>
