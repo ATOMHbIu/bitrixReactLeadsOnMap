@@ -12,6 +12,7 @@ function App() {
   const [{dateStart,dateEnd}, setDates] = useState({});
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [triggerList, setTriggerList] = useState(null)
 
   useEffect(()=>{
     setLoading(true)
@@ -24,6 +25,7 @@ function App() {
       fetchData();
     }
   }, [settings])
+
 
   async function fetchData(){
     const ress = await fetch("https://moscowdom.adsdesign.ru/getWithFilter",
@@ -44,13 +46,18 @@ function App() {
     setSettings(data)
   }
 
+  const setListItemData = (id, count)=>{
+    regions.features[id].count=count
+    setTriggerList({id, count})
+  }
+
   return (
     <div className="App">
-      <YMaps query={{coordorder: 'latlong', load: 'package.full'}}>
+      <YMaps query={{load: 'package.full', apikey: "cd1c4834-1d3b-484c-88ea-fb96de1de28a"}}>
         <div className={loading?'loading true':'loading false'}> <img src="https://b24.adsdesign.ru/bp/MoscowDOM/static/media/loader.afbd6385.gif" /></div>
         <ToolBar dateStart={dateStart} dateEnd={dateEnd} newData={(data)=>setNewData(data)}/>
-        <RightMenu total={points.length} regions={regions.features}/>
-        <MapContainer points={points} regions={regions}/>
+        <RightMenu total={points.length} regions={regions.features} triggerList={triggerList}/>
+        <MapContainer points={points} regions={regions} selectorData={(id, count)=>setListItemData(id, count)}/>
       </YMaps>
     </div>
   );

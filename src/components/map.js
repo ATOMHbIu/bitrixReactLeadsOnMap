@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useLayoutEffect, componentDidMount } from 'react'
 import {Map, Placemark, ObjectManager, Polygon} from 'react-yandex-maps'
 
-const MapContainer = ({points, regions}) =>{
+const MapContainer = ({points, regions, selectorData}) =>{
 
     const [map, setMap] = useState(null)
     const [ymaps, setYmaps] = useState(null)
+    const [mapRef, setMapRef]=useState(null)
 
-    const calc=(e, ref)=>{
+    const calc=(e)=>{
         const objectId = e.get('objectId');
-        const obj = ref.objects.getById(objectId);
+        const obj = mapRef.objects.getById(objectId);
         let iter = 0;
         let ymaPol = new ymaps.Polygon(obj.geometry.coordinates)
         ymaPol.options.setParent(map.options);
@@ -22,7 +23,7 @@ const MapContainer = ({points, regions}) =>{
             let current = (ymaPol.geometry.contains([parseFloat(el.coords[0]),parseFloat(el.coords[1])]))
             if(current){iter++}
         })
-        console.log(iter)
+        selectorData(objectId, iter)
     }
 
     return (
@@ -31,13 +32,14 @@ const MapContainer = ({points, regions}) =>{
                 controls: [] }}
             width='100%'
             height='100vh'
-            onLoad={ymaps => setYmaps(ymaps)}
-            instanceRef={map => setMap(map)}
+            onLoad={(ymaps) => {setYmaps(ymaps)}}
+            instanceRef={(map) => {setMap(map)}}
         >
             <ObjectManager
                 features={regions}
                 modules={["package.full"]}
-                instanceRef={ref => ref.objects.events.add('click', (e) => { calc(e,ref)})}
+                onClick={e=>calc(e)}
+                instanceRef={ref => setMapRef(ref)}
             />
             {points&&(
                 points.map(el=>(
