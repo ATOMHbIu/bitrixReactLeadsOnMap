@@ -175,6 +175,11 @@
     margin-left: 15px;
   }
 
+  .rightmenu .row.red{
+    color:rgb(163, 24, 24);
+    font-weight: 700;
+  }
+
   .rightmenu .row:after{
     content: "";
     display: table;

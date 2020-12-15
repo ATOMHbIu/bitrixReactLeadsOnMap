@@ -51,13 +51,25 @@ function App() {
     setTriggerList({id, count})
   }
 
+  const lightItem=(id)=>{
+    regions.features.forEach(el=>{
+      el.lightened=false
+    })
+    regions.features[id].lightened=true
+  }
+
   return (
     <div className="App">
       <YMaps query={{load: 'package.full', apikey: "cd1c4834-1d3b-484c-88ea-fb96de1de28a"}}>
         <div className={loading?'loading true':'loading false'}> <img src="https://b24.adsdesign.ru/bp/MoscowDOM/static/media/loader.afbd6385.gif" /></div>
         <ToolBar dateStart={dateStart} dateEnd={dateEnd} newData={(data)=>setNewData(data)}/>
-        <RightMenu total={points.length} regions={regions.features} triggerList={triggerList}/>
-        <MapContainer points={points} regions={regions} selectorData={(id, count)=>setListItemData(id, count)}/>
+        <RightMenu total={points.length} regions={regions.features}/>
+        <MapContainer 
+          points={points} 
+          regions={regions}
+          selectorData={(id, count)=>setListItemData(id, count)}
+          lightItem={(id)=>lightItem(id)}
+        />
       </YMaps>
     </div>
   );
