@@ -159,38 +159,38 @@
     transition: all .3s;
   }
 
-  .rightmenu{
+  .rightMenu{
     width: 15%;
-    height: calc(100% - 66px);
+    height: 100%;
     display: block;
     right: 0;
-    top: 66px;
+    top: 0;
     position: absolute;
     background: #fff;
     z-index: 7777;
   }
 
-  .rightmenu .row{
-    margin-top: 7px;
+  .rightMenu .row{
+    margin-top: 4px;
     margin-left: 15px;
   }
 
-  .rightmenu .row.red{
+  .rightMenu .row.red{
     color:rgb(163, 24, 24);
     font-weight: 700;
   }
 
-  .rightmenu .row:after{
+  .rightMenu .row:after{
     content: "";
     display: table;
     clear: both;
   }
 
-  .rightmenu .row .title,
-  .rightmenu .row .count{
+  .rightMenu .row .title,
+  .rightMenu .row .count{
     float: left;
   }
 
-  .rightmenu .row .count{
+  .rightMenu .row .count{
     margin-left: 7px;
   }

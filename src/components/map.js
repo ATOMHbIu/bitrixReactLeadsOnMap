@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, componentDidMount } from 'react'
 import {Map, Placemark, ObjectManager, Polygon} from 'react-yandex-maps'
 
-const MapContainer = ({points, regions, selectorData, lightItem}) =>{
+const MapContainer = ({points, regions, listData, lightItem}) =>{
 
     const [map, setMap] = useState(null)
     const [ymaps, setYmaps] = useState(null)
@@ -14,8 +14,6 @@ const MapContainer = ({points, regions, selectorData, lightItem}) =>{
     },[mapRef, points])
 
     const countRegions = () =>{
-        console.log('counting regions')
-        console.log(points)
         if (points.length>=0){
             regions.features.forEach(pol=>{
                 const obj = mapRef.objects.getById(pol.id);
@@ -32,9 +30,9 @@ const MapContainer = ({points, regions, selectorData, lightItem}) =>{
                     let current = (ymaPol.geometry.contains([parseFloat(el.coords[0]),parseFloat(el.coords[1])]))
                     if(current){iter++}
                 })
-                selectorData(pol.id, iter)
-            })      
-        }  
+                listData(pol.id, iter)
+            })
+        }
     }
 
     const showRegion=(e)=>{
@@ -59,7 +57,7 @@ const MapContainer = ({points, regions, selectorData, lightItem}) =>{
             {points&&(
                 points.map(el=>(
                     <Placemark
-                        key={el.ID}
+                        key={'pm'+el.ID}
                         geometry={el.coords}
                         properties={{
                             hintContent: el.ID,
